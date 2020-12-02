@@ -28,7 +28,7 @@ RUN mkdir /var/run/sshd
 RUN echo 'root:emptypasswd' | chpasswd
 # rootでのログイン許可。ただしパスワードでの接続は禁止
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config
-# ポートの変更とそのポートの開放。ポート変更はしなくてもいい
+# ポートの変更とそのポートの開放。ポート変更は別にしなくてもいい
 RUN sed -i 's/#Port 22/Port 20022/' /etc/ssh/sshd_config
 EXPOSE 20022
 # サーバーの起動。
@@ -44,7 +44,7 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-passwo
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 ```
 
-当然ながらパスワードログインの際のパスワードは以下の行で設定されているものであるため、このパスワードを知っている人であれば誰でもssh接続できるコンテナとなってしまう。すべての設定が終わり目的のDockerコンテナに公開鍵認証でssh接続できるようになった後は、rootユーザーでのパスワードログインは禁止するよう設定を変えることをオススメする。
+当然ながらパスワードログインの際のパスワードは以下の行で設定されているものであるため、このパスワードを知っている人であれば誰でもssh接続できるコンテナとなってしまう。すべての設定が終わり目的のDockerコンテナに公開鍵認証でssh接続できるようになった後は、rootユーザーでのパスワードログインは禁止するよう設定を変えることをオススメする
 
 ```dockerfile
 RUN echo 'root:emptypasswd' | chpasswd
@@ -64,7 +64,7 @@ ssh-add -K [秘密鍵のパス]
 
 ## ③コンテナに公開鍵の登録
 
-①で作成したイメージを元にコンテナを立ち上げる([part1](Docker%20part1.%20dockerで仮想環境の用意.md)参照)。あとは普通の公開鍵登録と同じ。ただ、コンテナは基本(今回の例でも勿論)rootユーザーであるため若干パスが違う。注意するのは、ここで登録するのはクライアントの公開鍵である点。
+①で作成したイメージを元にコンテナを立ち上げる([part1](Docker%20part1.%20dockerで仮想環境の用意.md)参照)。あとは普通の公開鍵登録と同じ。ただ、コンテナは基本(今回の例でも勿論)rootユーザーであるため若干パスが違う。注意するのは、ここで登録するのはクライアントの公開鍵である点
 
 ```bash
 # まずは作成したコンテナへ接続
@@ -90,7 +90,7 @@ cat [登録したい公開鍵ファイル] >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 ```
 
-ここまでダラダラと設定方法を書いたが、実は①のDockerfileの設定の際に以下の1行入れるだけで良かったりする。作成したDockerイメージもコンテナも、自分しか使わないのであればこっちの方がずっと楽。イメージが共有されるにしても、一応「公開」鍵で誰にバレようと問題ないわけだし。
+ここまでダラダラと設定方法を書いたが、実は①のDockerfileの設定の際に以下の1行入れるだけで良かったりする。作成したDockerイメージもコンテナも、自分しか使わないのであればこっちの方がずっと楽。イメージが共有されるにしても、一応「公開」鍵で誰にバレようと問題ないわけだし
 
 ```dockerfile
 COPY [コピー元公開鍵のパス] /root/.ssh/authorized_keys
@@ -100,7 +100,7 @@ COPY [コピー元公開鍵のパス] /root/.ssh/authorized_keys
 
 ## ④多段sshの設定
 
-ここもクライアントでの設定。例としてClient -> Host1 -> Host2 -> Host2上のDockerコンテナと多段sshすることを考える。まずは~/.ssh/configを開く。多分大体は以下のような感じのはず。
+ここもクライアントでの設定。例としてClient -> Host1 -> Host2 -> Host2上のDockerコンテナと多段sshすることを考える。まずは~/.ssh/configを開く。多分大体は以下のような感じのはず
 
 ```configs
 Host Host1
@@ -113,7 +113,7 @@ Host Host2
   Port 22222
 ```
 
-ここでClientからHost1を踏み台にHost2に多段sshをする場合、以下のような設定になる。ただし、Clientの公開鍵をHost2に登録しておく必要がある。
+ここでClientからHost1を踏み台にHost2に多段sshをする場合、以下のような設定になる。ただし、Clientの公開鍵をHost2に登録しておく必要がある
 
 ```configs
 Host Host1
@@ -130,7 +130,7 @@ Host Host2
 多段sshでコンテナまで接続する際も同じように設定すればよい。Dockerコンテナのアドレスは以下のコマンドで調べられる
 
 ```bash
-# IPアドレスという項目がそれ
+# 以下のコマンドで出てきた中でIPAddressという項目がそれ
 docker inspect [コンテナ名]
 ```
 
@@ -157,3 +157,5 @@ Host Host2-DockerContainer
 これで多段sshの設定は終了。接続テストをしてみよう
 
 ---
+
+これらすべての設定が終われば、VSCodeのRemote-SSH機能を使うことでコンテナへ接続できる

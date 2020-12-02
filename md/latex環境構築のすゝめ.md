@@ -6,7 +6,7 @@ TeX LiveとVisual Studio Codeを用いたLaTeX環境の構築ガイド
 
 ## 必要なもののインストール
 
-どちらも最新版で大丈夫なはず。TeX Liveは2019版・2020版で動作確認済。
+TeX Liveは2019版・2020版で動作確認済。
 
 - [TeX Live](https://texwiki.texjp.org/?TeX%20Live)
 - [Visual Studio Code](https://azure.microsoft.com/ja-jp/products/visual-studio-code/)
@@ -50,7 +50,7 @@ VSCodeのsettings.jsonにいくつかオプションを追加することで自�
 これ以外の設定も勿論あるので、ネットで良さげなのがあればどんどん追加して自分好みにカスタマイズしよう。
 //はコメント文。
 
-```json
+```config
 {
     // ------------------------------------------------------------------------
     // latex
