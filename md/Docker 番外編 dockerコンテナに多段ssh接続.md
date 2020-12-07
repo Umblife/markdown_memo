@@ -1,6 +1,6 @@
 # リモートマシン上のDockerコンテナにクライアントのVSCodeから多段sshで接続
 
-[part2](Docker%20part2.%20docker仮想環境にリモート接続.md)ではVSCodeの[Remote Container](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)機能を使いコンテナにアクセスする設定の説明をした。こちらでは[Remote SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)機能のみでVSCodeからコンテナへアクセスする説明をする。基本的にpart2での方法で問題ないが、例えばDockerコンテナが起動しているホストマシン自体に多段sshをしなければ接続できない場合などで、こちらの設定を使う必要がある。
+[part2](Docker%20part2.%20dockerコンテナ%20with%20VSCode.md)ではVSCodeの[Remote Container](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)機能を使いコンテナにアクセスする設定の説明をした。こちらでは[Remote SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)機能のみでVSCodeからコンテナへアクセスする説明をする。基本的にpart2での方法で問題ないが、例えばDockerコンテナが起動しているホストマシン自体に多段sshをしなければ接続できない場合などで、こちらの設定を使う必要がある。
 
 ## はじめに
 
@@ -113,7 +113,7 @@ Host Host2
   Port 22222
 ```
 
-ここでClientからHost1を踏み台にHost2に多段sshをする場合、以下のような設定になる。ただし、Clientの公開鍵をHost2に登録しておく必要がある
+ここでClientからHost1を踏み台にHost2に多段sshをする場合、以下のような設定になる。ただし、Clientの公開鍵をHost2に登録しておく必要がある。Host2のアドレスはHost1から見たアドレスになることに注意
 
 ```configs
 Host Host1
@@ -121,13 +121,13 @@ Host Host1
   User Hoge1
 
 Host Host2
-  HostName yyy.yyy.yy.yy
+  HostName YYY.YYY.YY.YY
   User Hoge2
   Port 22222
   ProxyCommand ssh -W %h:%p Host1
 ```
 
-多段sshでコンテナまで接続する際も同じように設定すればよい。Dockerコンテナのアドレスは以下のコマンドで調べられる
+多段sshでコンテナまで接続する際も同じように設定すればよい。Host2上のDockerコンテナのアドレスは、Host2に接続した後以下のコマンドで調べられる
 
 ```bash
 # 以下のコマンドで出てきた中でIPAddressという項目がそれ
@@ -142,7 +142,7 @@ Host Host1
   User Hoge1
 
 Host Host2
-  HostName yyy.yyy.yy.yy
+  HostName YYY.YYY.YY.YY
   User Hoge2
   Port 22222
   ProxyCommand ssh -W %h:%p Host1
