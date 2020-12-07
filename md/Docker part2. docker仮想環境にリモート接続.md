@@ -40,7 +40,7 @@ ssh接続については調べたら参考になるサイトがたくさん出�
 
   VSCodeのsettings.jsonに以下の設定を必要な箇所を訂正して追加
 
-  ```json
+  ```config
   {
     "docker.host": "ssh://[リモートでのユーザ名]@[リモートマシンのアドレス]"
     // "docker.host": "ssh://tanaka@192.168.10.10"   example
