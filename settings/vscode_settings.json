@@ -1,0 +1,276 @@
+{
+    // ------------------------------------------------------------------------
+    // 全体設定
+    // ------------------------------------------------------------------------
+
+    "editor.detectIndentation": false,
+    "explorer.confirmDelete": false,
+    "files.autoGuessEncoding": true,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.fontSize": 11,
+    "editor.fontFamily": "Consolas",
+    "editor.rulers": [
+        79
+    ],
+    "vsicons.dontShowNewVersionMessage": true,
+    "workbench.iconTheme": "vscode-icons",
+    "window.zoomLevel": 0,
+
+    // VSCodeで使われるターミナル
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+
+    // 変更を追跡しないフォルダ
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.venv/**": true
+    },
+    "docker.host": "ssh://Umblife@192.168.10.10",
+
+    // ------------------------------------------------------------------------
+    // python
+    // ------------------------------------------------------------------------
+
+    // VSCodeで使われるpythonのパス
+    "python.pythonPath": "D:/Software/Python/3.6/python.exe",
+
+    // 自動で読み込まれるモジュールのパス
+    "python.autoComplete.extraPaths": [
+        "D:/Software/Python/3.6/Lib/site-packages",
+    ],
+
+    // pythonファイル読み込み時の設定
+    "[python]": {
+        "files.encoding": "utf8",
+        "files.autoGuessEncoding": false
+    },
+
+    // linterの設定
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Args": [
+        "--ignore",
+        "E731",
+        "--max-line-length",
+        "120"
+    ],
+    "python.linting.flake8Enabled": true,
+
+    // ------------------------------------------------------------------------
+    // git
+    // ------------------------------------------------------------------------
+
+    "git.ignoreMissingGitWarning": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+
+    // ------------------------------------------------------------------------
+    // markdown
+    // ------------------------------------------------------------------------
+
+    // tabをスペース2個で定義
+    "[markdown]": {
+        "editor.tabSize": 2,
+    },
+
+    // ------------------------------------------------------------------------
+    // latex
+    // ------------------------------------------------------------------------
+
+    // tabをスペース2個で定義
+    "[latex]": {
+        "editor.tabSize": 2,
+        // "files.encoding": "shiftjis"
+    },
+
+    // editor.wordSeparators: 単語単位での移動を行う場合の区切り文字を指定
+    "editor.wordSeparators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?　、。「」【】『』（）！？てにをはがのともへでや",
+
+    // latex-workshop.latex.tools: Tool の定義
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-f",
+                "-gg",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name":"ptex2pdf",
+            "command": "ptex2pdf",
+            "args": [
+                "-l",
+                "-ot",
+                "-kanji=utf8 -synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name":"ptex2pdf (uplatex)",
+            "command": "ptex2pdf",
+            "args": [
+                "-l",
+                "-u",
+                "-ot",
+                "-kanji=utf8 -synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "pbibtex",
+            "command": "pbibtex",
+            "args": [
+                "-kanji=utf8",
+                "%DOCFILE%"
+            ]
+        },
+    ],
+
+    // latex-workshop.latex.recipes: Recipe の定義
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "ptex2pdf*2",
+            "tools": [
+                "ptex2pdf",
+                "ptex2pdf"
+            ]
+        },
+        {
+            "name": "latexmk",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "pdflatex*2",
+            "tools": [
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "pdflatex -> bibtex -> pdflatex*2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "ptex2pdf -> pbibtex -> ptex2pdf*2",
+            "tools": [
+                "ptex2pdf",
+                "pbibtex",
+                "ptex2pdf",
+                "ptex2pdf"
+            ]
+        },
+        {
+            "name": "ptex2pdf (uplatex) *2",
+            "tools": [
+                "ptex2pdf (uplatex)",
+                "ptex2pdf (uplatex)"
+            ]
+        },
+        {
+            "name": "ptex2pdf (uplatex) -> pbibtex -> ptex2pdf (uplatex) *2",
+            "tools": [
+                "ptex2pdf (uplatex)",
+                "pbibtex",
+                "ptex2pdf (uplatex)",
+                "ptex2pdf (uplatex)"
+            ]
+        },
+        {
+            "name": "ptex2pdf",
+            "tools": [
+                "ptex2pdf",//タイプセットに使うtoolの名前
+            ]
+        },
+    ],
+
+    // latex-workshop.latex.magic.args: マジックコメント付きの LaTeX ドキュメントをビルドする設定
+    // 参考リンク: https://blog.miz-ar.info/2016/11/magic-comments-in-tex/
+    "latex-workshop.latex.magic.args": [
+      "-f",
+      "-gg",
+      "-pv",
+      "-synctex=1",
+      "-interaction=nonstopmode",
+      "-file-line-error",
+      "%DOC%"
+    ],
+
+    // latex-workshop.latex.clean.fileTypes: クリーンアップ時に削除されるファイルの拡張子
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk",
+        "*.synctex.gz",
+        // for Beamer files
+        "_minted*",
+        "*.nav",
+        "*.snm",
+        "*.vrb",
+    ],
+
+    // latex-workshop.view.pdf.viewer: PDF ビューアの開き方
+    "latex-workshop.view.pdf.viewer": "tab",
+
+    // latex-workshop.latex.clean.onFailBuild.enabled: ビルド失敗時に一時ファイルのクリーンアップを行うかどうか
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+
+    // // latex-workshop.latex.autoBuild.onSave.enabled: .tex ファイルの保存時に自動的にビルドを行うかどうか
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
+    "remote.SSH.remotePlatform": {
+        "192.168.10.10": "windows",
+        "DL-Box2": "linux"
+    },
+    "jupyter.sendSelectionToInteractiveWindow": true,
+    "jupyter.askForKernelRestart": false,
+
+    // ------------------------------------------------------------------------
+}
