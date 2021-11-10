@@ -28,55 +28,20 @@ WindowsにDockerをインストールする際は注意する点がいくつか�
 
 ## ②VSCodeの設定
 
-以下のどちらか好きな方でクライアントマシンに設定する。
+クライアントマシンのssh-agentに秘密鍵の登録(不要かも？)
 
-- SSHプロトコル(推奨)
+```bash
+ssh-add -K [鍵のパス]
+```
 
-  ssh-agentに秘密鍵の登録(不要かも？)
+VSCodeのsettings.jsonに、以下の設定を必要な箇所を訂正して追加
 
-  ```bash
-  ssh-add -K [鍵のパス]
-  ```
-
-  VSCodeのsettings.jsonに、以下の設定を必要な箇所を訂正して追加
-
-  ```config
-  {
-    "docker.host": "ssh://[リモートでのユーザ名]@[リモートマシンのアドレス]"
-    // "docker.host": "ssh://tanaka@192.168.10.10"   example
-  }
-  ```
-
-- TCPプロトコルの使用
-
-  VSCodeでsshのconfigを開き、ホストへの接続設定の部分にLocalForwardの項目を追記
-
-  以下はポート23750番を使う場合の例
-
-  ```bash
-  # 例えばもともと以下のような設定だった場合
-  Host hostexample1
-    HostName 192.168.10.10
-    IdentityFile C:/Users/yourname/.ssh/id_rsa
-    User Tanaka
-    Port 22
-
-  # LocalForward 23750 /var/run/docker.sockを追記
-  Host hostexample1
-    HostName 192.168.10.10
-    IdentityFile C:/Users/yourname/.ssh/id_rsa
-    User Tanaka
-    Port 22
-    LocalForward 23750 /var/run/docker.sock
-  ```
-
-  VSCodeのsettings.jsonに以下を追記
-
-  ```json
-  {
-    "docker.host": "tcp://[リモートマシンのアドレス]:23750"
-  }
-  ```
+```config
+{
+  "docker.host": "ssh://[リモートでのユーザ名]@[リモートマシンのアドレス]"
+  // "docker.host": "ssh://tanaka@192.168.10.10"   example
+}
+```
 
 参考
 
@@ -88,8 +53,8 @@ WindowsにDockerをインストールする際は注意する点がいくつか�
 
 ## ③VSCodeから接続
 
-1. VSCode左のリモートエクスプローラー
+1. VSCode左のメニューバーからリモートエクスプローラーを選択
 1. プルダウンリスト(多分デフォルトはSSH Targets)からContainersを選択
-1. 目的のコンテナに接続
+1. ホストマシン上のコンテナリストが表示されるはずなので、目的のコンテナを探して接続
 
 ---
