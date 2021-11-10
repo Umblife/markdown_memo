@@ -28,15 +28,11 @@ WindowsにDockerをインストールする際は注意する点がいくつか�
 
 ## ②VSCodeの設定
 
-- [公式ガイド](https://code.visualstudio.com/docs/remote/containers-advanced#_developing-inside-a-container-on-a-remote-docker-host)
-
-- [チュートリアル](https://code.visualstudio.com/docs/remote/containers-tutorial)
-
 以下のどちらか好きな方でクライアントマシンに設定する。
 
 - SSHプロトコル(推奨)
 
-  ssh-agentに秘密鍵の登録
+  ssh-agentに秘密鍵の登録(不要かも？)
 
   ```bash
   ssh-add -K [鍵のパス]
@@ -82,10 +78,18 @@ WindowsにDockerをインストールする際は注意する点がいくつか�
   }
   ```
 
+参考
+
+- [公式ガイド](https://code.visualstudio.com/docs/remote/containers-advanced#_developing-inside-a-container-on-a-remote-docker-host)
+
+- [チュートリアル](https://code.visualstudio.com/docs/remote/containers-tutorial)
+
 ---
 
 ## ③VSCodeから接続
 
-左のリモートエクスプローラーから接続したいコンテナを選択 -> 右クリックで __Open__ __Folder__ __in__ __Container__
+1. VSCode左のリモートエクスプローラー
+1. プルダウンリスト(多分デフォルトはSSH Targets)からContainersを選択
+1. 目的のコンテナに接続
 
 ---
