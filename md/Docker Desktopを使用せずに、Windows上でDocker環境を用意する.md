@@ -205,6 +205,30 @@ LinuxディストリビューションはUbuntu 20.04で確認。
     fi
     ```
 
+    ### Ubuntu 22.04での注意点
+
+    ```bash
+    sudo service docker start
+    ```
+
+    と実行し、
+
+    ```bash
+    * Starting Docker: docker                        [ OK ]
+    ```
+
+    と出ているのに、いざdocker関連のコマンドを打つと
+
+    ```bash
+    docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?. See 'docker run --help'.
+    ```
+
+    と出て、実行できない場合がある。そのときは以下を入力し、iptables-legacyモードに変更すると解決する
+
+    ```bash
+    sudo update-alternatives --config iptables
+    ```
+
 これにより、今後はWSL上でdockerコマンドを使用できるようになる。Windowsのパスはそのままでは使用できないため、WSLから見たパスで置き換える必要がある点に注意。
 
 ## docker-compose v2のインストール(任意)
