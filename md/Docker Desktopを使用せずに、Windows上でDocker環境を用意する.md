@@ -74,7 +74,7 @@ WSL上のLinuxディストリビューションにDocker Engineをインスト�
 
     - /etc/resolv.confの編集
 
-        もともとはシンボリックリンクなのでまずはunlink
+        もともとはシンボリックリンクなのでまずはunlink。unlinkせずリンク先の本体を編集してもOK
 
         ```bash
         sudo unlink /etc/resolv.conf
