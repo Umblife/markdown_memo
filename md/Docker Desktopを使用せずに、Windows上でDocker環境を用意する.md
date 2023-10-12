@@ -62,7 +62,6 @@ WSL上のLinuxディストリビューションにDocker Engineをインスト�
 
     <details><summary>Ubuntu 20.04での設定例</summary><div>
 
-    
     - resolv.confの上書きを無効化
 
         /etc/wsl.confを作成して以下を記述
@@ -121,6 +120,8 @@ LinuxディストリビューションはUbuntu 20.04で確認。
 
 1. Linux系OSおける[通常の手順](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)と同様にインストール。
 
+    <details><summary>Ubuntu 20.04でのインストール例</summary><div>
+
     必要パッケージのインストール
 
     ```bash
@@ -153,6 +154,8 @@ LinuxディストリビューションはUbuntu 20.04で確認。
 
     特にエラーが出なければインストール自体はこれで完了
 
+    </div></details>
+
 1. 一般ユーザーへの権限付与
 
     ```bash
@@ -174,7 +177,7 @@ LinuxディストリビューションはUbuntu 20.04で確認。
     export https_proxy="http://xxxxx:port"
     ```
 
-1. dockerコマンドをsudoなしで実行できるようにする
+1. dockerコマンドをsudoなしで実行できるようにする(任意だけど推奨)
 
     もともとsudoなしで実行できるのであればこの手順は不要。以下のコマンドを順に実行
 
@@ -186,7 +189,7 @@ LinuxディストリビューションはUbuntu 20.04で確認。
     sudo gpasswd -a $USER docker
     ```
 
-1. 自動起動の設定
+1. 自動起動の設定(任意)
 
     このままだとWSLを再起動するたびにDocker Deamonを手動で起動する必要があるが、以下により自動で起動するように設定できる
 
@@ -205,31 +208,34 @@ LinuxディストリビューションはUbuntu 20.04で確認。
     fi
     ```
 
-    ### Ubuntu 22.04での注意点
-
-    ```bash
-    sudo service docker start
-    ```
-
-    と実行し、
-
-    ```bash
-    * Starting Docker: docker                        [ OK ]
-    ```
-
-    と出ているのに、いざdocker関連のコマンドを打つと
-
-    ```bash
-    docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?. See 'docker run --help'.
-    ```
-
-    と出て、実行できない場合がある。そのときは以下を入力し、iptables-legacyモードに変更すると解決する
-
-    ```bash
-    sudo update-alternatives --config iptables
-    ```
-
 これにより、今後はWSL上でdockerコマンドを使用できるようになる。Windowsのパスはそのままでは使用できないため、WSLから見たパスで置き換える必要がある点に注意。
+
+<details><summary>ディストリビューションがUbuntu 22.04の際の注意点</summary><div>
+
+```bash
+sudo service docker start
+```
+
+と実行し、
+
+```bash
+* Starting Docker: docker                        [ OK ]
+```
+
+と出ているのに、いざdocker関連のコマンドを打つと
+
+```bash
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?. See 'docker run --help'.
+```
+
+と出て、実行できない場合がある。そのときは以下を入力し、iptables-legacyモードに変更すると解決する
+
+```bash
+sudo update-alternatives --config iptables
+```
+
+</div></details>
+
 
 ## NVIDIA Container Toolkitのインストール(NVIDIA製GPUを使用したい場合)
 
