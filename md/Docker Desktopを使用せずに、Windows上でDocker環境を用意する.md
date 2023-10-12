@@ -42,7 +42,7 @@ WSL上のLinuxディストリビューションにDocker Engineをインスト�
 
 1. Linuxディストリビューションをインストール
 
-    Microsoft Storeから適当なディストリビューションをインストール。
+    Microsoft Storeから適当なディストリビューションをインストール。初回はユーザー名などの設定があるため、適当に設定する。
 
     ### Storeからインストールできない場合
 
@@ -52,19 +52,17 @@ WSL上のLinuxディストリビューションにDocker Engineをインスト�
     dism.exe /Online /Add-ProvisionedAppxPackage /PackagePath:[ダウンロードしたファイルのパス] /SkipLicense
     ```
 
-    例えばUbuntu 20.04をインストールした場合、Windowsキーを押して「Ubuntu 20.04」と検索するとアプリが表示されるはずなので、実際に起動するかを確かめる。初回はユーザー名などの設定があるため、適当に設定する。
+    例えばUbuntu 20.04をインストールした場合、Windowsキーを押して「Ubuntu 20.04」と検索するとアプリが表示されるはずなので、実際に起動するかを確かめる。
 
     コマンドでインストールできなかった場合は[こちら](https://phst.hateblo.jp/entry/2020/01/18/000000)を参考にインストールする
 
-1. 起動したディストリビューションにプロキシ設定
+1. 起動したディストリビューションにプロキシ設定(__プロキシないならスキップ__)
 
-    プロキシないならスキップ。以下の2つを設定
+    DNSとプロキシを環境に合わせて設定
 
-    - DNSサーバー
-    - プロキシサーバー
+    <details><summary>Ubuntu 20.04での設定例</summary><div>
 
-    ### Ubuntu 20.04の場合
-
+    
     - resolv.confの上書きを無効化
 
         /etc/wsl.confを作成して以下を記述
@@ -112,6 +110,8 @@ WSL上のLinuxディストリビューションにDocker Engineをインスト�
     - その他のプログラムごとの設定
 
         [ここ](https://lambdalisue.hatenablog.com/entry/2013/06/25/140630)を参考に
+
+    </div></details>
 
   設定を終えたらwslを再起動
 
