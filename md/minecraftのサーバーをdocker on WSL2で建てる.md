@@ -59,14 +59,16 @@ dockerコンテナとwsl2間ではdocker-compose.yaml内portsの項目で設定�
 ```bash
 # get localhost IP from wsl2
 IP=$(ifconfig eth0 | grep 'inet ' | awk '{print $2}')
+WINPORT=25565
+WSLPORT=25565
 
-# 25565
-netsh.exe interface portproxy delete v4tov4 listenport=25565
-netsh.exe interface portproxy add v4tov4 listenport=25565 connectaddress=$IP
+# port fowarding
+netsh.exe interface portproxy delete v4tov4 listenaddress=* listenport=$WINPORT
+netsh.exe interface portproxy add v4tov4 listenaddress=* listenport=$WINPORT connectaddress=$IP connectport=$WSLPORT
 
 # run IP Helper
 sc.exe config iphlpsvc start=auto
 sc.exe start iphlpsvc
 ```
 
-## 参考にさせたいただいたサイト
+## 参考にしたサイト

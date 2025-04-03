@@ -41,6 +41,47 @@ wsl --import Ubuntu-24.04 D:\wsl C:\tmp\ubuntu.tar
 default=user-name
 ```
 
+## proxyの設定（ubuntu 22.04の例、必要な環境のみ）
+
+1. /etc/wsl.conf
+
+    resolv.confの自動生成を無効化
+
+    ```conf
+    [network]
+    generateResolvConf=false
+    ```
+
+1. /etc/resolv.conf
+
+    ```bash
+    # もともとはシンボリックリンクなのでunlink
+    sudo unlink /etc/resolv.conf
+    sudo vi /etc/resolv.conf
+    ```
+
+    以下を追記
+
+    ```conf
+    nameserver xxx.xxx.xxx.xx   # 優先DNS
+    nameserver xxx.xxx.xxx.xx   # 代替DNS
+    domain xxx.xxx.xxx.jp
+    ```
+
+1. /etc/apt/apt.conf.d/02proxy
+
+    ```conf
+    Acquire::http::Proxy "http://proxy:port";
+    Acquire::https::Proxy "http://proxy:port";
+    ```
+
+1. /etc/profile.d/proxy.sh
+
+    ```bash
+    export http_proxy=http://proxy:port/
+    export https_proxy=http://proxy:port/
+    ```
+
 ## dockerのインストール
 
 通常のubuntuと同様の手順でインストール
@@ -53,6 +94,8 @@ sudo apt-get update
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+# proxy環境下でうまく行かない場合は-Eオプションを付けて試してみるとよい
+# sudo -E curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 # Add the repository to Apt sources:
@@ -72,28 +115,52 @@ sudoなしでdockerコマンドを使用できるようにする(実行後、タ
 sudo usermod -aG docker $USER
 ```
 
-dockerデーモンの自動起動設定(wsl.confのsystemd=true)
+<details><summary>dockerデーモンの自動起動設定</summary><div>
 
-```bash
-sudo systemctl enable docker
-```
+- wsl.confのsystemd=trueの場合
 
-<details><summary>systemd=falseの場合は以下を参考に</summary><div>
+    ```bash
+    sudo systemctl enable docker
+    ```
 
-sudoersに以下を追記
+- wsl.confのsystemd=falseの場合
 
-```
-ユーザ名 ALL=NOPASSWD: /usr/sbin/service docker start, /usr/sbin/service docker stop, /usr/sbin/service docker restart
-```
+    sudoersに以下を追記
 
-.bashrc(zshなら.zshrc)に以下を追記
+    ```
+    ユーザ名 ALL=NOPASSWD: /usr/sbin/service docker start, /usr/sbin/service docker stop, /usr/sbin/service docker restart
+    ```
 
-```bash
-# start docker deamon
-if test $(service docker status | awk '{print $4}') = 'not'; then
-    sudo service docker start
-fi
-```
+    .bashrc(zshなら.zshrc)に以下を追記
+
+    ```bash
+    # start docker deamon
+    if test $(service docker status | awk '{print $4}') = 'not'; then
+        sudo service docker start
+    fi
+    ```
+
+</div></details>
+
+<details><summary>dockerへのプロキシ設定</summary><div>
+
+- systemd=trueの場合
+
+    /etc/systemd/system/docker.service、もしくは/etc/systemd/system/docker.service.d/(任意名).confに以下を追記
+
+    ```conf
+    [Service]
+    Environment = 'http_proxy=http://proxy:port' 'https_proxy=http://proxy:port'
+    ```
+
+- systemd=falseの場合
+
+    /etc/default/dockerに以下を追記
+
+    ```
+    export http_proxy="http://proxy:port"
+    export https_proxy="http://proxy:port"
+    ```
 
 </div></details>
 
@@ -125,18 +192,34 @@ sudo systemctl restart docker
 
 ## その他
 
-pythonパスの設定
+- pythonパスの設定
 
-```bash
-sudo ln -s /usr/bin/python3 /usr/bin/python
-```
+    ```bash
+    sudo ln -s /usr/bin/python3 /usr/bin/python
+    ```
 
-zellijのインストール
+- zellijのインストール
 
-```bash
-# Rust and Cargo
-curl https://sh.rustup.rs -sSf | sh
+    ```bash
+    # Rust and Cargo
+    curl https://sh.rustup.rs -sSf | sh
 
-# after reload terminal,
-cargo install --locked zellij
-```
+    # insall build-essential
+    sudo apt update
+    sudo apt install build-essential
+
+    # after reload terminal,
+    cargo install --locked zellij
+    ```
+
+- wsl起動時に指定ディレクトリをマウント
+
+    your\local\directoryを/mnt/drive1としてマウントする例
+
+    /etc/fstabに以下を追記
+
+    ```conf
+    \\your\local\directory /mnt/drive1 drvfs metadata,noatime,uid=1000,gid=1000,defaults 0 0
+    ```
+
+    ただし、/mnt/drive1ディレクトリはあらかじめ作成しておく
